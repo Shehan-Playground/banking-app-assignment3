@@ -367,6 +367,7 @@ public class SmartBankingApp {
         boolean valid;
         double transferAmount;
         double feeAmount = 0;
+        
         do {
             valid = true;
             System.out.print("\n\tEnter Transfer Amount: ");
@@ -379,6 +380,7 @@ public class SmartBankingApp {
                 if (isContinue(CONTINUE_MESSAGE)) continue;
                 else return false;
             }
+
             feeAmount = transferAmount * 2 /100;
             if (Integer.parseInt(accounts[fromAccount][2])-transferAmount-feeAmount < 500) {
                 System.out.printf(ERROR_MSG, "Insufficient account balance");
