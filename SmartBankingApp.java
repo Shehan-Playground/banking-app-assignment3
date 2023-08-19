@@ -234,4 +234,23 @@ public class SmartBankingApp {
         return false;
     }
 
+    public static boolean callAccount() {
+        boolean valid;
+        do {
+            
+            valid = true;
+            System.out.print("Enter A/C No: ");
+            String accountNumber = scanner.nextLine();
+
+            if (!accountNumberValidate(accountNumber)) {
+                valid = false;
+                if (isContinue(CONTINUE_MESSAGE)) continue;
+                else return false;
+            } 
+        } while (!valid);
+
+        return true;
+    }
+
     
+}
