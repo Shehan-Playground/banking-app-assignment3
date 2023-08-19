@@ -16,7 +16,7 @@ public class SmartBankingApp {
     final static String NEWCUSTOMER_MESSAGE = "\n\tDo you want to add another new customer (Y/n)? ";
 
     // static String[][] accounts = new String[0][3];
-    static String[][] accounts = {{"1","Shehan rathnayake","5000"},{"2","Kamal Fernando","14000"},{"3","Saman Kanchana","45000"}};
+    static String[][] accounts = {{"1","Shehan Rathnayake","5000"},{"2","Kamal Fernando","14000"},{"3","Saman Kanchana","45000"}};
     static int selectedIndex;
 
     private static Scanner scanner = new Scanner (System.in);
@@ -245,6 +245,27 @@ public class SmartBankingApp {
                     double availableBalance = Double.parseDouble(accounts[selectedIndex][2])-500;
                     System.out.printf("\tAvailable balance for withdrawal: Rs.%.2f", availableBalance);
                     System.out.println();
+
+                    if (isContinue(CONTINUE_MESSAGE)) continue;
+                    else {
+                        screen = DASHBOARD;
+                        break;
+                    }
+
+                case DROP_ACCOUNT:
+
+                    if (!callAccount("\b")) {
+                        screen = DASHBOARD;
+                        break;
+                    }
+                    checkBalance();
+
+                    if (isContinue("\n\tAre you sure you want to delete (Y/n)? ")) deleteAccount();
+                    else {
+                        screen = DASHBOARD;
+                        break;
+                    }
+
                     if (isContinue(CONTINUE_MESSAGE)) continue;
                     else {
                         screen = DASHBOARD;
@@ -266,6 +287,7 @@ public class SmartBankingApp {
         } while (true);
 
     }
+    
     public static boolean isContinue(String statement) {
         
         System.out.print(statement);
@@ -418,5 +440,25 @@ public class SmartBankingApp {
         System.out.printf("\n\tCurrent Balance: Rs.%.2f\n", Double.parseDouble(accounts[selectedIndex][2]));
     }
 
+    public static void deleteAccount() {
+
+        // Deleting data from the array
+
+        String[][] newAccounts = new String[accounts.length-1][3];
+
+        for (int index = 0, i = 0; index < newAccounts.length; index++, i++) {
+
+            if (index == selectedIndex) i++;
+            newAccounts[index][0] = accounts[i][0];
+            newAccounts[index][1] = accounts[i][1];
+            newAccounts[index][2] = accounts[i][2];
+        }
+
+        int accountId = Integer.parseInt(accounts[selectedIndex][0]);
+        String accountName = accounts[selectedIndex][1];
+        accounts = newAccounts;
+
+        System.out.printf(SUCCESS_MSG,String.format("Account number SDB-%05d for %s has been deleted successfully.", accountId, accountName));
+    }
 
 }
