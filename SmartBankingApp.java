@@ -182,6 +182,28 @@ public class SmartBankingApp {
                         break;
                     }
 
+                case WITHDRAW_MONEY:
+
+                    if (!callAccount("\b")) {
+                        screen = DASHBOARD;
+                        break;
+                    }
+                    checkBalance();
+
+                    if (!accountWithdraw()) {
+                        screen = DASHBOARD;
+                        break;
+                    }
+
+                    System.out.printf(SUCCESS_MSG,"Transaction Successfull");
+                    checkBalance();
+
+                    if (isContinue(CONTINUE_MESSAGE)) continue;
+                    else {
+                        screen = DASHBOARD;
+                        break;
+                    }
+
                 case EXIT:
 
                     if (isContinue(EXITAPP_MESSAGE)) System.exit(0);
@@ -278,6 +300,35 @@ public class SmartBankingApp {
         } while (!valid);
 
         accounts[selectedIndex][2] = (Integer.parseInt(accounts[selectedIndex][2])+depositAmount)+"";
+        return true;
+    }
+
+    public static boolean accountWithdraw() {
+        boolean valid;
+        double withdrawAmount;
+        do {
+            valid = true;
+            System.out.print("\n\tEnter Withdraw Amount: ");
+            withdrawAmount = scanner.nextDouble();
+            scanner.nextLine();
+
+            if (withdrawAmount < 100) {
+                System.out.printf(ERROR_MSG, "Minimum withdrawal amount is Rs.100.00");
+                valid = false;
+                if (isContinue(CONTINUE_MESSAGE)) continue;
+                else return false;
+            }
+
+            if (Integer.parseInt(accounts[selectedIndex][2])-withdrawAmount < 500) {
+                System.out.printf(ERROR_MSG, "Insufficient account balance");
+                valid = false;
+                if (isContinue(CONTINUE_MESSAGE)) continue;
+                else return false;
+            }
+
+        } while (!valid);
+
+        accounts[selectedIndex][2] = (Integer.parseInt(accounts[selectedIndex][2])-withdrawAmount)+"";
         return true;
     }
 
