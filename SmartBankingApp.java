@@ -242,6 +242,9 @@ public class SmartBankingApp {
                     }
                     checkBalance();
 
+                    double availableBalance = Double.parseDouble(accounts[selectedIndex][2])-500;
+                    System.out.printf("\tAvailable balance for withdrawal: Rs.%.2f", availableBalance);
+                    System.out.println();
                     if (isContinue(CONTINUE_MESSAGE)) continue;
                     else {
                         screen = DASHBOARD;
