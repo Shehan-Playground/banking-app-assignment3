@@ -199,5 +199,39 @@ public class SmartBankingApp {
         else return false;
     }
 
+    public static boolean accountNumberValidate(String accountNumber) {
+
+        //Checking empty input
+        if (accountNumber.isBlank()) {
+            System.out.println("\tAccount number cannot be empty");
+            return false;
+        }
+
+        // Checking format
+        if (accountNumber.length() != 9 || !accountNumber.startsWith("SDB-")) {
+            System.out.println("\tInvalid format");
+            return false;
+        }
+
+        //Checking digits
+        for (int i = 0; i < accountNumber.length(); i++) {
+            if(!Character.isDigit(accountNumber.substring(4).charAt(i))) {
+                System.out.println("\tInvalid format");
+                return false;
+            }
+        }
+
+        //Checking existance
+        int i;
+        
+        for (i = 0; i < accounts.length; i++) {
+            if (Integer.parseInt(accountNumber.substring(4)) == Integer.parseInt(accounts[i][0])) {
+                selectedIndex = i;
+                return true;
+            }
+        }
+        System.out.println("Not found");
+        return false;
+    }
+
     
-}
