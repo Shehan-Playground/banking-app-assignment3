@@ -1,18 +1,25 @@
 import java.util.Scanner;
 
 public class SmartBankingApp {
+
+    final static String BLUE_COLOR = "\033[034;1m";
+    final static String RED_COLOR = "\033[031;1m";
+    final static String GREEN_COLOR = "\033[032;1m";
+    final static String RESET = "\033[0m";
+    final static String CLEAR = "\033[H\033[2J";
+    final static String ERROR_MSG = String.format("\n\t%s%s%s\n", RED_COLOR,"%s",RESET);
+    final static String SUCCESS_MSG = String.format("\n\t%s%s%s\n", GREEN_COLOR,"%s",RESET);
+    final static String APP_MARGIN = String.format("\n\t%s%s%s\n", BLUE_COLOR,"%s",RESET);
+
+    final static String CONTINUE_MESSAGE = "\n\tDo you want to continue (Y/n)? ";
+    final static String EXITAPP_MESSAGE = "\n\tAre you sure you want to exit from App (Y/n)? ";
+    final static String NEWCUSTOMER_MESSAGE = "\n\tDo you want to add another new customer (Y/n)? ";
+
+    static String[][] accounts = new String[0][3];
+    static int selectedIndex;
+
     private static Scanner scanner = new Scanner (System.in);
     public static void main(String[] args) {
-        
-        final String BLUE_COLOR = "\033[034;1m";
-        final String RED_COLOR = "\033[031;1m";
-        final String GREEN_COLOR = "\033[032;1m";
-        final String RESET = "\033[0m";
-        final String CLEAR = "\033[H\033[2J";
-        final String ERROR_MSG = String.format("\n\t%s%s%s\n", RED_COLOR,"%s",RESET);
-        final String SUCCESS_MSG = String.format("\n\t%s%s%s\n", GREEN_COLOR,"%s",RESET);
-        final String APP_MARGIN = String.format("\n\t%s%s%s\n", BLUE_COLOR,"%s",RESET);
-        
         final String DASHBOARD = "💰 Welcome to Smart Banking App";
         final String OPEN_ACCOUNT = "Open New Account";
         final String DEPOSIT_MONEY = "Deposit Money";
@@ -22,11 +29,7 @@ public class SmartBankingApp {
         final String DROP_ACCOUNT = "Drop Existing Account";
         final String EXIT = "Exit App";
 
-        final String CONTINUE_MESSAGE = "\n\tDo you want to continue (Y/n)? ";
-        final String EXITAPP_MESSAGE = "\n\tAre you sure you want to exit from App (Y/n)? ";
-        final String NEWCUSTOMER_MESSAGE = "\n\tDo you want to add another new customer (Y/n)? ";
-
-        String[][]accounts = new String[0][3];
+        
 
         String screen = DASHBOARD;
 
@@ -156,6 +159,22 @@ public class SmartBankingApp {
                         break;
                     }
 
+                case DEPOSIT_MONEY:
+
+                    if (!callAccount()) {
+                        screen = DASHBOARD;
+                        break;
+                    }
+
+                    System.out.printf("\n\tCurrent Balance: Rs.%.2f\n", Double.parseDouble(accounts[selectedIndex][2]));
+
+                    if (!accountDeposit()) {
+                        screen = DASHBOARD;
+                        break;
+                    }
+
+                    System.out.printf("\n\tCurrent Balance: Rs.%.2f\n", Double.parseDouble(accounts[selectedIndex][2]));
+
                 case EXIT:
 
                     if (isContinue(EXITAPP_MESSAGE)) System.exit(0);
@@ -179,4 +198,6 @@ public class SmartBankingApp {
         if (answer.equals("Y")) return true;
         else return false;
     }
+
+    
 }
