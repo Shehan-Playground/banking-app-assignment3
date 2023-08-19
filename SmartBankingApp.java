@@ -234,6 +234,20 @@ public class SmartBankingApp {
                         break;
                     }
 
+                case CHECK_BALANCE:
+
+                    if (!callAccount("\b")) {
+                        screen = DASHBOARD;
+                        break;
+                    }
+                    checkBalance();
+
+                    if (isContinue(CONTINUE_MESSAGE)) continue;
+                    else {
+                        screen = DASHBOARD;
+                        break;
+                    }
+
                 case EXIT:
 
                     if (isContinue(EXITAPP_MESSAGE)) System.exit(0);
@@ -367,7 +381,7 @@ public class SmartBankingApp {
         boolean valid;
         double transferAmount;
         double feeAmount = 0;
-        
+
         do {
             valid = true;
             System.out.print("\n\tEnter Transfer Amount: ");
