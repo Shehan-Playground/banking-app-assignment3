@@ -15,8 +15,8 @@ public class SmartBankingApp {
     final static String EXITAPP_MESSAGE = "\n\tAre you sure you want to exit from App (Y/n)? ";
     final static String NEWCUSTOMER_MESSAGE = "\n\tDo you want to add another new customer (Y/n)? ";
 
-    // static String[][] accounts = new String[0][3];
-    static String[][] accounts = {{"1","Shehan Rathnayake","5000"},{"2","Kamal Fernando","14000"},{"3","Saman Kanchana","45000"}};
+    static String[][] accounts = new String[0][3];
+    // static String[][] accounts = {{"1","Shehan Rathnayake","5000"},{"2","Kamal Fernando","14000"},{"3","Saman Kanchana","45000"}};
     static int selectedIndex;
 
     private static Scanner scanner = new Scanner (System.in);
@@ -287,7 +287,7 @@ public class SmartBankingApp {
         } while (true);
 
     }
-    
+
     public static boolean isContinue(String statement) {
         
         System.out.print(statement);
