@@ -204,6 +204,36 @@ public class SmartBankingApp {
                         break;
                     }
 
+                case TRANSFER_MONEY:
+
+                    if (!callAccount("From")) {
+                        screen = DASHBOARD;
+                        break;
+                    }
+                    int fromAccountIndex = selectedIndex;
+                    checkBalance();
+
+                    if (!callAccount("To")) {
+                        screen = DASHBOARD;
+                        break;
+                    }
+
+                    checkBalance();
+
+                    if (!accountTransfer(fromAccountIndex)) {
+                        screen = DASHBOARD;
+                        break;
+                    }
+
+                    System.out.printf(SUCCESS_MSG,"Transaction Successfull");
+                    checkBalance();
+
+                    if (isContinue(CONTINUE_MESSAGE)) continue;
+                    else {
+                        screen = DASHBOARD;
+                        break;
+                    }
+
                 case EXIT:
 
                     if (isContinue(EXITAPP_MESSAGE)) System.exit(0);
@@ -329,6 +359,38 @@ public class SmartBankingApp {
         } while (!valid);
 
         accounts[selectedIndex][2] = (Integer.parseInt(accounts[selectedIndex][2])-withdrawAmount)+"";
+        return true;
+    }
+
+    public static boolean accountTransfer(int fromAccount) {
+
+        boolean valid;
+        double transferAmount;
+        double feeAmount = 0;
+        do {
+            valid = true;
+            System.out.print("\n\tEnter Transfer Amount: ");
+            transferAmount = scanner.nextDouble();
+            scanner.nextLine();
+
+            if (transferAmount < 100) {
+                System.out.printf(ERROR_MSG, "Minimum transferable amount is Rs.100.00");
+                valid = false;
+                if (isContinue(CONTINUE_MESSAGE)) continue;
+                else return false;
+            }
+            feeAmount = transferAmount * 2 /100;
+            if (Integer.parseInt(accounts[fromAccount][2])-transferAmount-feeAmount < 500) {
+                System.out.printf(ERROR_MSG, "Insufficient account balance");
+                valid = false;
+                if (isContinue(CONTINUE_MESSAGE)) continue;
+                else return false;
+            }
+
+        } while (!valid);
+
+        accounts[selectedIndex][2] = (Integer.parseInt(accounts[selectedIndex][2])+transferAmount)+"";
+        accounts[fromAccount][2] = (Integer.parseInt(accounts[fromAccount][2])-transferAmount-feeAmount)+"";
         return true;
     }
 
