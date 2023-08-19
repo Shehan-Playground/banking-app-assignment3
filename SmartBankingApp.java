@@ -252,5 +252,26 @@ public class SmartBankingApp {
         return true;
     }
 
-    
+    public static boolean accountDeposit() {
+        boolean valid;
+        double depositAmount;
+        do {
+            valid = true;
+            System.out.print("\n\tEnter Deposit Amount: ");
+            depositAmount = scanner.nextDouble();
+            scanner.nextLine();
+
+            if (depositAmount < 500) {
+                System.out.printf(ERROR_MSG, "Minimum depost amount is Rs.500.00");
+                valid = false;
+                if (isContinue(CONTINUE_MESSAGE)) continue;
+                else return false;
+            }
+        } while (!valid);
+
+        updateAccount (depositAmount, 1);
+
+        return true;
+    }
+
 }
