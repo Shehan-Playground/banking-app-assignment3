@@ -15,7 +15,8 @@ public class SmartBankingApp {
     final static String EXITAPP_MESSAGE = "\n\tAre you sure you want to exit from App (Y/n)? ";
     final static String NEWCUSTOMER_MESSAGE = "\n\tDo you want to add another new customer (Y/n)? ";
 
-    static String[][] accounts = new String[0][3];
+    // static String[][] accounts = new String[0][3];
+    static String[][] accounts = {{"1","Shehan rathnayake","5000"},{"2","Kamal Fernando","14000"},{"3","Saman Kanchana","45000"}};
     static int selectedIndex;
 
     private static Scanner scanner = new Scanner (System.in);
@@ -161,19 +162,25 @@ public class SmartBankingApp {
 
                 case DEPOSIT_MONEY:
 
-                    if (!callAccount()) {
+                    if (!callAccount("\b")) {
                         screen = DASHBOARD;
                         break;
                     }
-
-                    System.out.printf("\n\tCurrent Balance: Rs.%.2f\n", Double.parseDouble(accounts[selectedIndex][2]));
+                    checkBalance();
 
                     if (!accountDeposit()) {
                         screen = DASHBOARD;
                         break;
                     }
 
-                    System.out.printf("\n\tCurrent Balance: Rs.%.2f\n", Double.parseDouble(accounts[selectedIndex][2]));
+                    System.out.printf(SUCCESS_MSG,"Transaction Successfull");
+                    checkBalance();
+
+                    if (isContinue(CONTINUE_MESSAGE)) continue;
+                    else {
+                        screen = DASHBOARD;
+                        break;
+                    }
 
                 case EXIT:
 
@@ -194,7 +201,7 @@ public class SmartBankingApp {
         
         System.out.print(statement);
         String answer = scanner.nextLine().strip().toUpperCase();
-        System.out.println();
+        // System.out.println();
         if (answer.equals("Y")) return true;
         else return false;
     }
@@ -203,20 +210,21 @@ public class SmartBankingApp {
 
         //Checking empty input
         if (accountNumber.isBlank()) {
-            System.out.println("\tAccount number cannot be empty");
+            System.out.printf(ERROR_MSG,"Account number cannot be empty");
             return false;
         }
 
         // Checking format
         if (accountNumber.length() != 9 || !accountNumber.startsWith("SDB-")) {
-            System.out.println("\tInvalid format");
+            System.out.printf(ERROR_MSG,"Invalid format");
             return false;
         }
 
         //Checking digits
-        for (int i = 0; i < accountNumber.length(); i++) {
-            if(!Character.isDigit(accountNumber.substring(4).charAt(i))) {
-                System.out.println("\tInvalid format");
+        String numberString = accountNumber.substring(4);
+        for (int i = 0; i < numberString.length(); i++) {
+            if(!Character.isDigit(numberString.charAt(i))) {
+                System.out.printf(ERROR_MSG,"Invalid format");
                 return false;
             }
         }
@@ -230,16 +238,16 @@ public class SmartBankingApp {
                 return true;
             }
         }
-        System.out.println("Not found");
+        System.out.printf(ERROR_MSG,"Not found");
         return false;
     }
 
-    public static boolean callAccount() {
+    public static boolean callAccount(String prefix) {
         boolean valid;
         do {
             
             valid = true;
-            System.out.print("Enter A/C No: ");
+            System.out.printf("\n\tEnter%s%s%sA/C No: "," ",prefix," ");
             String accountNumber = scanner.nextLine();
 
             if (!accountNumberValidate(accountNumber)) {
@@ -269,9 +277,14 @@ public class SmartBankingApp {
             }
         } while (!valid);
 
-        updateAccount (depositAmount, 1);
-
+        accounts[selectedIndex][2] = (Integer.parseInt(accounts[selectedIndex][2])+depositAmount)+"";
         return true;
     }
+
+    public static void checkBalance() {
+        System.out.printf("\n\tName: %s",accounts[selectedIndex][1]);
+        System.out.printf("\n\tCurrent Balance: Rs.%.2f\n", Double.parseDouble(accounts[selectedIndex][2]));
+    }
+
 
 }
