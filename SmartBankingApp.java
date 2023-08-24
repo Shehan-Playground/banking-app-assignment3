@@ -24,8 +24,8 @@ public class SmartBankingApp {
     final static String DROP_ACCOUNT = "Drop Existing Account";
     final static String EXIT = "Exit App";
 
-    static String[][] accounts = new String[0][3];
-    // static String[][] accounts = {{"1","Shehan Rathnayake","5000"},{"2","Kamal Fernando","14000"},{"3","Saman Kanchana","45000"}};
+    // static String[][] accounts = new String[0][3];
+    static String[][] accounts = {{"1","Shehan Rathnayake","5000"},{"2","Kamal Fernando","14000"},{"3","Saman Kanchana","45000"}};
     static int selectedIndex;
 
     static String screen = DASHBOARD;
@@ -430,7 +430,7 @@ public class SmartBankingApp {
                 else return false;
             }
 
-            if (Integer.parseInt(accounts[selectedIndex][2])-withdrawAmount < 500) {
+            if (Double.parseDouble(accounts[selectedIndex][2])-withdrawAmount < 500) {
                 System.out.printf(ERROR_MSG, "Insufficient account balance");
                 valid = false;
                 if (isContinue(CONTINUE_MESSAGE)) continue;
@@ -439,7 +439,7 @@ public class SmartBankingApp {
 
         } while (!valid);
 
-        accounts[selectedIndex][2] = (Integer.parseInt(accounts[selectedIndex][2])-withdrawAmount)+"";
+        accounts[selectedIndex][2] = (Double.parseDouble(accounts[selectedIndex][2])-withdrawAmount)+"";
         return true;
     }
 
@@ -465,7 +465,7 @@ public class SmartBankingApp {
             }
 
             feeAmount = transferAmount * 2 /100;
-            if (Integer.parseInt(accounts[fromAccount][2])-transferAmount-feeAmount < 500) {
+            if (Double.parseDouble(accounts[fromAccount][2])-transferAmount-feeAmount < 500) {
                 System.out.printf(ERROR_MSG, "Insufficient account balance");
                 valid = false;
                 if (isContinue(CONTINUE_MESSAGE)) continue;
@@ -474,8 +474,8 @@ public class SmartBankingApp {
 
         } while (!valid);
 
-        accounts[selectedIndex][2] = (Integer.parseInt(accounts[selectedIndex][2])+transferAmount)+"";
-        accounts[fromAccount][2] = (Integer.parseInt(accounts[fromAccount][2])-transferAmount-feeAmount)+"";
+        accounts[selectedIndex][2] = (Double.parseDouble(accounts[fromAccount][2])+transferAmount)+"";
+        accounts[fromAccount][2] = (Double.parseDouble(accounts[fromAccount][2])-transferAmount-feeAmount)+"";
         return true;
     }
 
@@ -491,7 +491,6 @@ public class SmartBankingApp {
     public static void deleteAccount() {
 
         // Deleting data from the array
-
         String[][] newAccounts = new String[accounts.length-1][3];
 
         for (int index = 0, i = 0; index < newAccounts.length; index++, i++) {
@@ -512,8 +511,8 @@ public class SmartBankingApp {
 
 
     public static void createAccount(int accountId, String accountName, double initialDeposit) {
-        // Storing data into arrays
 
+        // Storing data into arrays
         String[][] newAccounts = new String[accounts.length+1][3];
 
         int index;
