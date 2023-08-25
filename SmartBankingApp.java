@@ -28,67 +28,21 @@ public class SmartBankingApp {
     static String[][] accounts = {{"1","Shehan Rathnayake","5000"},{"2","Kamal Fernando","14000"},{"3","Saman Kanchana","45000"}};
     static int selectedIndex;
 
-    static String screen = DASHBOARD;
-
     private static Scanner scanner = new Scanner (System.in);
     public static void main(String[] args) {
+
+        dashboard();
         
-        do {
-            final String APPTITLE = screen;
-            System.out.println(CLEAR);
-            System.out.printf(APP_MARGIN, APPTITLE);
-
-            switch (screen){
-                case DASHBOARD:
-                    dashboard();
-                    break;
-
-                case OPEN_ACCOUNT:
-                    openAccount();
-                    break;
-                    
-                case DEPOSIT_MONEY:
-                    deposit();
-                    break;
-
-                case WITHDRAW_MONEY:
-
-                    withdraw();
-                    break;
-
-                case TRANSFER_MONEY:
-
-                    transfer();
-                    break;
-
-                case CHECK_BALANCE:
-
-                    balance();
-                    break;
-
-                case DROP_ACCOUNT:
-
-                    accountDrop();
-                    break;
-
-                case EXIT:
-
-                    if (isContinue(EXITAPP_MESSAGE)) System.exit(0);
-                    else {
-                        screen = DASHBOARD;
-                        break;
-                    }
-
-                default: screen = DASHBOARD;
-            }
-                
-        } while (true);
-
     }
 
 
 
     public static void dashboard() {
+
+        // final String APPTITLE = screen;
+        System.out.println(CLEAR);
+        System.out.printf(APP_MARGIN, DASHBOARD);
+
         System.out.printf("\n\t[1]. %s\n\t[2]. %s\n\t[3]. %s\n\t[4]. %s\n\t[5]. %s\n\t[6]. %s\n\t[7]. Exit\n", OPEN_ACCOUNT,DEPOSIT_MONEY,WITHDRAW_MONEY,TRANSFER_MONEY,CHECK_BALANCE,DROP_ACCOUNT);
         System.out.print("\n\n\tEnter an option: ");
         int option = scanner.nextInt();
@@ -98,13 +52,13 @@ public class SmartBankingApp {
         System.out.println();
 
         switch (option) {
-            case 1: screen = OPEN_ACCOUNT; break;
-            case 2: screen = DEPOSIT_MONEY; break;
-            case 3: screen = WITHDRAW_MONEY; break;
-            case 4: screen = TRANSFER_MONEY; break;
-            case 5: screen = CHECK_BALANCE; break;
-            case 6: screen = DROP_ACCOUNT; break;
-            case 7: screen = EXIT; break;
+            case 1: openAccount(); break;
+            case 2: deposit(); break;
+            case 3: withdraw(); break;
+            case 4: transfer(); break;
+            case 5: balance(); break;
+            case 6: accountDrop(); break;
+            case 7: exit(); break;
             default:
         }
     }
@@ -112,6 +66,10 @@ public class SmartBankingApp {
 
 
     public static void openAccount() {
+
+        System.out.println(CLEAR);
+        System.out.printf(APP_MARGIN, OPEN_ACCOUNT);
+
         // Generating account id
         int accountId = generateAccountID();;
         
@@ -120,7 +78,7 @@ public class SmartBankingApp {
         //Enter Account name
         String accountName = accountName();
         if (accountName == "") {
-            screen = DASHBOARD;
+            dashboard();
             return;
         }
         
@@ -129,121 +87,162 @@ public class SmartBankingApp {
 
         double initialDeposit = initialDeposit();
         if (initialDeposit == 0.0) {
-            screen = DASHBOARD;
+            dashboard();
             return;
         }
 
         createAccount(accountId, accountName, initialDeposit);
         
-        if (isContinue(NEWCUSTOMER_MESSAGE)) screen = OPEN_ACCOUNT;
-        else screen = DASHBOARD;
+        if (isContinue(NEWCUSTOMER_MESSAGE)) openAccount();
+        else dashboard();
     }
 
 
 
     public static void deposit() {
+
+        //Account deposit process
+        System.out.println(CLEAR);
+        System.out.printf(APP_MARGIN, DEPOSIT_MONEY);
+
         if (!callAccount("\b")) {
-            screen = DASHBOARD;
+            dashboard();
             return;
         }
-        checkBalance();
+        checkBalance(selectedIndex);
 
         if (!accountDeposit()) {
-            screen = DASHBOARD;
+            dashboard();
             return;
         }
 
         System.out.printf(SUCCESS_MSG,"Transaction Successfull");
-        checkBalance();
+        checkBalance(selectedIndex);
 
-        if (isContinue(CONTINUE_MESSAGE)) screen = DEPOSIT_MONEY;
-        else screen = DASHBOARD;
+        if (isContinue(CONTINUE_MESSAGE)) deposit();
+        else dashboard();
     }
 
 
 
     public static void withdraw () {
+
+        //Account withdraw process
+        System.out.println(CLEAR);
+        System.out.printf(APP_MARGIN, WITHDRAW_MONEY);
+
         if (!callAccount("\b")) {
-            screen = DASHBOARD;
+            dashboard();
             return;
         }
-        checkBalance();
+        checkBalance(selectedIndex);
 
         if (!accountWithdraw()) {
-            screen = DASHBOARD;
+            dashboard();
             return;
         }
 
         System.out.printf(SUCCESS_MSG,"Transaction Successfull");
-        checkBalance();
+        checkBalance(selectedIndex);
 
-        if (isContinue(CONTINUE_MESSAGE)) screen = WITHDRAW_MONEY;
-        else screen = DASHBOARD;
+        if (isContinue(CONTINUE_MESSAGE)) withdraw();
+        else dashboard();
     }
 
 
 
     public static void transfer() {
+
+        // Money transfer process
+        System.out.println(CLEAR);
+        System.out.printf(APP_MARGIN, TRANSFER_MONEY);
+
         if (!callAccount("From")) {
-            screen = DASHBOARD;
+            dashboard();
             return;
         }
         int fromAccountIndex = selectedIndex;
-        checkBalance();
+        checkBalance(selectedIndex);
 
         if (!callAccount("To")) {
-            screen = DASHBOARD;
+            dashboard();
             return;
         }
 
-        checkBalance();
+        checkBalance(selectedIndex);
 
         if (!accountTransfer(fromAccountIndex)) {
-            screen = DASHBOARD;
+            dashboard();
             return;
         }
 
+        //Successfull message and displaying balance
         System.out.printf(SUCCESS_MSG,"Transaction Successfull");
-        checkBalance();
 
-        if (isContinue(CONTINUE_MESSAGE)) screen = TRANSFER_MONEY;
-        else screen = DASHBOARD;
+        System.out.println("\n\tFrom Account: ");
+        checkBalance(fromAccountIndex);
+
+        System.out.println("\n\tTo Account: ");
+        checkBalance(selectedIndex);
+
+        if (isContinue(CONTINUE_MESSAGE)) transfer();
+        else dashboard();
     }
     
 
 
     public static void balance() {
+
+        // Displaying balance process
+        System.out.println(CLEAR);
+        System.out.printf(APP_MARGIN, CHECK_BALANCE);
+
         if (!callAccount("\b")) {
-            screen = DASHBOARD;
+            dashboard();
             return;
         }
-        checkBalance();
+        checkBalance(selectedIndex);
 
         double availableBalance = Double.parseDouble(accounts[selectedIndex][2])-500;
         System.out.printf("\tAvailable balance for withdrawal: Rs.%.2f", availableBalance);
         System.out.println();
 
-        if (isContinue(CONTINUE_MESSAGE)) screen = CHECK_BALANCE;
-        else screen = DASHBOARD;
+        if (isContinue(CONTINUE_MESSAGE)) balance();
+        else dashboard();
     }
 
 
 
     public static void accountDrop() {
+
+        // Account delete process
+        System.out.println(CLEAR);
+        System.out.printf(APP_MARGIN, DROP_ACCOUNT);
+
         if (!callAccount("\b")) {
-            screen = DASHBOARD;
+            dashboard();
             return;
         }
-        checkBalance();
+        checkBalance(selectedIndex);
 
         if (isContinue("\n\tAre you sure you want to delete (Y/n)? ")) deleteAccount();
         else {
-            screen = DASHBOARD;
+            dashboard();
             return;
         }
 
-        if (isContinue(CONTINUE_MESSAGE)) screen = DROP_ACCOUNT;
-        else screen = DASHBOARD;
+        if (isContinue(CONTINUE_MESSAGE)) accountDrop();
+        else dashboard();
+    }
+
+
+
+    public static void exit() {
+
+        // Program exit process
+        if (isContinue(EXITAPP_MESSAGE)) System.exit(0);
+
+        else dashboard();
     }
 
 
@@ -252,7 +251,7 @@ public class SmartBankingApp {
         
         System.out.print(statement);
         String answer = scanner.nextLine().strip().toUpperCase();
-        // System.out.println();
+
         if (answer.equals("Y")) return true;
         else return false;
     }
@@ -473,17 +472,19 @@ public class SmartBankingApp {
             }
 
         } while (!valid);
-
-        accounts[selectedIndex][2] = (Double.parseDouble(accounts[fromAccount][2])+transferAmount)+"";
+        
         accounts[fromAccount][2] = (Double.parseDouble(accounts[fromAccount][2])-transferAmount-feeAmount)+"";
+        accounts[selectedIndex][2] = (Double.parseDouble(accounts[selectedIndex][2])+transferAmount)+"";
+
         return true;
     }
 
     
     
-    public static void checkBalance() {
-        System.out.printf("\n\tName: %s",accounts[selectedIndex][1]);
-        System.out.printf("\n\tCurrent Balance: Rs.%.2f\n", Double.parseDouble(accounts[selectedIndex][2]));
+    public static void checkBalance(int index) {
+        
+        System.out.printf("\n\tName: %s",accounts[index][1]);
+        System.out.printf("\n\tCurrent Balance: Rs.%.2f\n", Double.parseDouble(accounts[index][2]));
     }
 
     
