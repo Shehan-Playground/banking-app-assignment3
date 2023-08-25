@@ -39,7 +39,6 @@ public class SmartBankingApp {
 
     public static void dashboard() {
 
-        // final String APPTITLE = screen;
         System.out.println(CLEAR);
         System.out.printf(APP_MARGIN, DASHBOARD);
 
@@ -482,7 +481,7 @@ public class SmartBankingApp {
     
     
     public static void checkBalance(int index) {
-        
+
         System.out.printf("\n\tName: %s",accounts[index][1]);
         System.out.printf("\n\tCurrent Balance: Rs.%.2f\n", Double.parseDouble(accounts[index][2]));
     }
