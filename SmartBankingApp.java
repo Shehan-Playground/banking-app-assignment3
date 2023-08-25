@@ -24,8 +24,8 @@ public class SmartBankingApp {
     final static String DROP_ACCOUNT = "Drop Existing Account";
     final static String EXIT = "Exit App";
 
-    // static String[][] accounts = new String[0][3];
-    static String[][] accounts = {{"1","Shehan Rathnayake","5000"},{"2","Kamal Fernando","14000"},{"3","Saman Kanchana","45000"}};
+    static String[][] accounts = new String[0][3];
+    // static String[][] accounts = {{"1","Shehan Rathnayake","5000"},{"2","Kamal Fernando","14000"},{"3","Saman Kanchana","45000"}};
     static int selectedIndex;
 
     private static Scanner scanner = new Scanner (System.in);
